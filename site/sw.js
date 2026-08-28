@@ -1,4 +1,4 @@
-const CACHE = "sqlite-workload-lab-v1";
+const CACHE = "sqlite-workload-lab-__RELEASE_ID__";
 const SHELL = ["/", "/index.html", "/lab-landscape.webp", "/lab-mark.svg"];
 
 self.addEventListener("install", (event) => {

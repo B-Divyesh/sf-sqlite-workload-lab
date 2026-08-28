@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile, stat } from "node:fs/promises";
 import { test } from "node:test";
+import { releaseId } from "../release-id.js";
 
 test("built document contains required semantics", async () => {
   const html = await readFile("dist/site/index.html", "utf8");
@@ -24,4 +25,11 @@ test("static assets stay inside product budgets", async () => {
   assert.ok(jsBytes <= 200 * 1024, `initial JS is ${jsBytes} bytes`);
   assert.ok(cssBytes <= 50 * 1024, `initial CSS is ${cssBytes} bytes`);
   assert.ok(fontBytes <= 120 * 1024, `self-hosted fonts are ${fontBytes} bytes`);
+});
+
+test("service-worker cache is versioned for this release", async () => {
+  const worker = await readFile("dist/site/sw.js", "utf8");
+  assert.match(worker, new RegExp(`const CACHE = "sqlite-workload-lab-${releaseId}"`));
+  assert.doesNotMatch(worker, /sqlite-workload-lab-v1/);
+  assert.doesNotMatch(worker, /__RELEASE_ID__/);
 });
