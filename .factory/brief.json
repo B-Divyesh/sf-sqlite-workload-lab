@@ -1,0 +1,15 @@
+{
+  "slug": "sqlite-workload-lab",
+  "title": "SQLite Workload Lab",
+  "territory": "devtools-data",
+  "user": "Developers shipping SQLite, FTS5, or SQLite extensions who need reproducible performance and CPU-compatibility evidence before publishing an optimization claim or binary release.",
+  "smallest_useful_product": "A CLI that executes declarative SQLite workloads in containers or QEMU profiles, captures SQLite version/compile options/PRAGMAs/query plans/CPU flags, and generates a diffable Markdown/JSON report.",
+  "success_measure": "A release candidate is tested against at least three declared CPU profiles and a regression greater than 15% is detected from a committed baseline in CI.",
+  "artifact_class": "cli",
+  "monetization": "free",
+  "constraints": [
+    "Clearly separate emulator from hardware results.",
+    "Pin SQLite builds and fixture data.",
+    "Do not claim statistically significant improvements without repeated-run methodology."
+  ]
+}
