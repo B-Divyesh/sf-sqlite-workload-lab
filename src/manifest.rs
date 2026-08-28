@@ -3,6 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result, bail, ensure};
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
 use crate::{fixture_path, sha256_bytes};
@@ -206,6 +207,15 @@ impl Manifest {
             self.lab.sqlite_version,
             runtime_sqlite
         );
+
+        let fixture_sql = std::str::from_utf8(&bytes)
+            .with_context(|| format!("fixture {} is not valid UTF-8 SQL", fixture.display()))?;
+        let connection = Connection::open_in_memory()
+            .context("could not create isolated database for SQL validation")?;
+        connection
+            .execute_batch(fixture_sql)
+            .with_context(|| format!("could not apply fixture {}", fixture.display()))?;
+        validate_readonly_queries(&connection, &self.queries)?;
         Ok(())
     }
 
@@ -224,6 +234,20 @@ impl Manifest {
                 )
             })
     }
+}
+
+pub(crate) fn validate_readonly_queries(connection: &Connection, queries: &[Query]) -> Result<()> {
+    for query in queries {
+        let statement = connection
+            .prepare(&query.sql)
+            .with_context(|| format!("could not prepare query {}", query.name))?;
+        ensure!(
+            statement.readonly(),
+            "query {} mutates the database; measured queries must be read-only",
+            query.name
+        );
+    }
+    Ok(())
 }
 
 fn unique_nonempty<'a>(values: impl Iterator<Item = &'a str>, label: &str) -> Result<()> {

@@ -97,3 +97,29 @@ fn json_error_is_machine_readable() {
         .failure()
         .stderr(predicate::str::contains("\"ok\":false"));
 }
+
+#[test]
+fn check_rejects_a_mutating_measured_query() {
+    let temp = tempfile::tempdir().unwrap();
+    let manifest = temp.path().join("mutating.toml");
+    lab().arg("init").arg(&manifest).assert().success();
+
+    let source = fs::read_to_string(&manifest).unwrap();
+    let source = source.replace(
+        "sql = \"SELECT rowid, title FROM docs WHERE docs MATCH 'sqlite OR workload' ORDER BY rank LIMIT 20\"",
+        "sql = \"DELETE FROM docs\"",
+    );
+    fs::write(&manifest, source).unwrap();
+
+    lab()
+        .args(["--json", "check"])
+        .arg(&manifest)
+        .assert()
+        .failure()
+        .stdout(predicate::str::is_empty())
+        .stderr(
+            predicate::str::contains("\"ok\":false").and(predicate::str::contains(
+                "query release-evidence mutates the database; measured queries must be read-only",
+            )),
+        );
+}

@@ -112,7 +112,7 @@ sql = "SELECT rowid FROM docs WHERE docs MATCH 'sqlite NEAR workload' LIMIT 20"
 capture_plan = true
 ```
 
-The fixture hash and SQLite version are mandatory pins. `check` fails on a missing fixture, a mismatched SHA-256, duplicate names, unsafe PRAGMA names, or fewer than three profiles. `run` fails when required CPU features are absent or forbidden features are present; use `--allow-profile-mismatch` only to investigate, and the report will carry the mismatch.
+The fixture hash and SQLite version are mandatory pins. `check` fails on a missing fixture, a mismatched SHA-256, duplicate names, unsafe PRAGMA names, fewer than three profiles, invalid SQL, or a measured statement that SQLite classifies as mutating. It prepares each statement against an isolated fixture database without executing the measured workload. `run` fails when required CPU features are absent or forbidden features are present; use `--allow-profile-mismatch` only to investigate, and the report will carry the mismatch.
 
 ## Exit codes
 

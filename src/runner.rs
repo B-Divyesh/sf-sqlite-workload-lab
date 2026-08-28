@@ -7,7 +7,7 @@ use rusqlite::types::ValueRef;
 use rusqlite::{Connection, OpenFlags};
 use sha2::{Digest, Sha256};
 
-use crate::manifest::{Manifest, Profile, normalize_feature};
+use crate::manifest::{Manifest, Profile, normalize_feature, validate_readonly_queries};
 use crate::report::{
     EnvironmentEvidence, Methodology, PragmaEvidence, QueryEvidence, Report, SqliteEvidence,
     Timing, WorkloadEvidence,
@@ -78,18 +78,10 @@ pub fn run(
         compile_options: query_strings(&connection, "PRAGMA compile_options")?,
     };
 
+    validate_readonly_queries(&connection, &manifest.queries)?;
+
     let mut queries = Vec::new();
     for query in &manifest.queries {
-        let statement = connection
-            .prepare(&query.sql)
-            .with_context(|| format!("could not prepare query {}", query.name))?;
-        ensure!(
-            statement.readonly(),
-            "query {} mutates the database; measured queries must be read-only",
-            query.name
-        );
-        drop(statement);
-
         let plan = if query.capture_plan {
             explain_plan(&connection, &query.sql)?
         } else {
