@@ -17,6 +17,13 @@ Release archives are produced by the factory; this repository does not publish i
 
 ## Usage
 
+Try the bundled sample without touching an existing workload. The command creates a new temporary directory unless `--out` names a new directory to keep.
+
+```sh
+sqlite-workload-lab demo
+sqlite-workload-lab demo --out sample-run
+```
+
 Create a documented starter workload:
 
 ```sh

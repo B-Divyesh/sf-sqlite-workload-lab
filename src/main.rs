@@ -1,9 +1,11 @@
+use std::env;
+use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 use anyhow::{Context, Result, bail};
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand, ValueEnum, error::ErrorKind};
 use serde::Serialize;
 use sqlite_workload_lab::{
     Report, compare_reports, ensure_parent, load_manifest, refuse_overwrite, sha256_bytes,
@@ -27,6 +29,12 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Command {
+    /// Run the bundled sample workload in an isolated directory.
+    Demo {
+        /// Keep the sample manifest, fixture, and reports in this new directory.
+        #[arg(long)]
+        out: Option<PathBuf>,
+    },
     /// Create a valid starter manifest and pinned FTS5 fixture.
     Init {
         #[arg(default_value = "lab.toml")]
@@ -106,7 +114,12 @@ enum Outcome {
 }
 
 fn main() -> ExitCode {
-    let cli = Cli::parse();
+    let args = env::args_os().collect::<Vec<_>>();
+    let json = requests_json(&args);
+    let cli = match Cli::try_parse_from(args) {
+        Ok(cli) => cli,
+        Err(error) => return emit_parse_error(error, json),
+    };
     match execute(&cli) {
         Ok(Outcome::Success) => ExitCode::SUCCESS,
         Ok(Outcome::Regression) => ExitCode::from(2),
@@ -122,8 +135,70 @@ fn main() -> ExitCode {
     }
 }
 
+fn requests_json(args: &[OsString]) -> bool {
+    args.iter().any(|argument| argument == "--json")
+}
+
+fn emit_parse_error(error: clap::Error, json: bool) -> ExitCode {
+    if matches!(
+        error.kind(),
+        ErrorKind::DisplayHelp | ErrorKind::DisplayVersion
+    ) {
+        let _ = error.print();
+        return ExitCode::SUCCESS;
+    }
+
+    if json {
+        let payload = serde_json::json!({
+            "ok": false,
+            "error": error.to_string().trim_end(),
+        });
+        eprintln!("{}", serde_json::to_string(&payload).unwrap());
+    } else {
+        let _ = error.print();
+    }
+    ExitCode::FAILURE
+}
+
 fn execute(cli: &Cli) -> Result<Outcome> {
     match &cli.command {
+        Command::Demo { out } => {
+            let directory = match out {
+                Some(path) => {
+                    refuse_overwrite(path)?;
+                    fs::create_dir_all(path).with_context(|| {
+                        format!("could not create demo directory {}", path.display())
+                    })?;
+                    path.clone()
+                }
+                None => tempfile::Builder::new()
+                    .prefix("sqlite-workload-lab-demo-")
+                    .tempdir()
+                    .context("could not create an isolated demo directory")?
+                    .keep(),
+            };
+            let manifest_path = directory.join("lab.toml");
+            let mut files = init(&manifest_path)?;
+            let manifest = load_manifest(&manifest_path)?;
+            let profile = manifest.profile("host")?;
+            let report =
+                sqlite_workload_lab::runner::run(&manifest_path, &manifest, profile, false)?;
+            files.extend(write_report(
+                &directory.join("reports"),
+                &report,
+                Format::Both,
+            )?);
+            emit_status(
+                cli.json,
+                "demo",
+                &format!(
+                    "Ran bundled sample data. Nothing touched an existing workload. Output: {}",
+                    directory.display()
+                ),
+                files,
+            )?;
+            Ok(Outcome::Success)
+        }
         Command::Init { manifest } => {
             let files = init(manifest)?;
             emit_status(

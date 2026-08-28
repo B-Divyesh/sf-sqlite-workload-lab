@@ -46,7 +46,7 @@ Entrance uses one 420 ms upward fade for the instrument cluster; evidence traces
 
 ## Original asset plan and provenance
 
-- `site/public/lab-landscape.webp`: AI-generated raster hero showing a glass SQLite page monolith, query traces, and three CPU strata. It explains the core relationship—one workload, multiple evidence environments—and contains no text, logos, people, or decorative stock imagery.
+- `site/public/lab-landscape-28fb23959f50.webp`: AI-generated raster hero showing a glass SQLite page monolith, query traces, and three CPU strata. The filename contains the first 12 characters of its SHA-256 digest so immutable caching is safe. It explains the core relationship—one workload, multiple evidence environments—and contains no text, logos, people, or decorative stock imagery.
 - Prompt: “Wide editorial 3D illustration for a developer tool landing page: a luminous translucent SQLite database page monolith suspended over three distinct dark silicon strata, one cyan query trace entering the glass and splitting into three measured paths, tiny amber and lime instrument lights, smoked teal glass, black-green laboratory void, precise etched grid, realistic refraction, elegant technical observatory mood, large quiet negative space on the left, no words, no letters, no logos, no UI screenshot, no people, no watermark.”
 - Generated with the factory `factory-image` deployment via `/opt/fleet/lib/gen-image.sh`, 1536×1024 high quality, 2026-08-28. The generated image is project-original and distributed under the repository MIT license. The PNG source is not shipped; the optimized WebP is capped at 300 KB.
 - Icons and the small profile diagram are original inline SVG/code-native geometry authored for this product.

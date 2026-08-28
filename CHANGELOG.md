@@ -11,8 +11,12 @@ All notable changes follow Keep a Changelog. This project uses semantic versioni
 - JSON and Markdown reports containing build, PRAGMA, plan, and repeated timing evidence.
 - CI comparator with a configurable regression threshold and exit code 2.
 - Static documentation site with an interactive recorded report walkthrough.
+- One-command `demo` sandbox with bundled sample data and isolated output.
 
 ### Fixed
 
 - Made `check` reject mutating measured SQL with the same SQLite read-only classification used by `run`.
 - Versioned service-worker caches from the package version and site-content digest so updates can retire stale caches.
+- Routed Clap parser failures through the JSON status contract and reserved exit code 2 for measured regressions.
+- Enlarged mobile text-link hit areas to the 44 px accessibility baseline.
+- Content-addressed the immutable hero image URL to prevent stale art across releases.

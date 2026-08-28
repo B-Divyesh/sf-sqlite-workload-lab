@@ -9,7 +9,9 @@
     "build:cli": "cargo build --release --locked",
     "build:site": "vite build --config site/vite.config.ts",
     "preview": "vite preview --config site/vite.config.ts",
-    "test": "cargo test --locked --all-targets && npm run build:site && node --test site/tests/unit.test.mjs && playwright test",
+    "test": "cargo test --locked --all-targets && npm run build:site && node --test site/tests/*.test.mjs && playwright test",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "cargo fmt --all -- --check && cargo clippy --locked --all-targets -- -D warnings",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
@@ -17,6 +19,7 @@
     "@fontsource-variable/inter": "5.2.6",
     "@fontsource-variable/jetbrains-mono": "5.2.6",
     "@playwright/test": "1.58.2",
+    "@types/node": "22.20.1",
     "typescript": "5.9.2",
     "vite": "7.3.6"
   }

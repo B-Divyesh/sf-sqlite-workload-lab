@@ -7,7 +7,7 @@ const releaseInputs = [
   new URL("./src/main.ts", import.meta.url),
   new URL("./src/style.css", import.meta.url),
   new URL("./sw.js", import.meta.url),
-  new URL("./public/lab-landscape.webp", import.meta.url),
+  new URL("./public/lab-landscape-28fb23959f50.webp", import.meta.url),
   new URL("./public/lab-mark.svg", import.meta.url),
 ];
 

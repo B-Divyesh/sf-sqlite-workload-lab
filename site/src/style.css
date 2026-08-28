@@ -149,7 +149,7 @@ pre { overflow: auto; margin: 10px 0 0; padding: 24px; color: #d9e7df; border: 1
 
 .install { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 80px; }
 .install-copy > p:not(.eyebrow) { margin: 24px 0; color: var(--mist); font-size: 18px; }
-.text-link { color: var(--aqua); font-weight: 620; text-underline-offset: 5px; }
+.text-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--aqua); font-weight: 620; text-underline-offset: 5px; }
 .install-terminal { overflow: hidden; border: 1px solid var(--glass-edge); border-radius: 16px 16px 3px 3px; background: var(--night-900); box-shadow: 24px 24px 0 rgba(97,231,205,.035); }
 .terminal-title { padding: 0 16px; border-bottom: 1px solid var(--glass-edge); }
 .install-terminal pre { margin: 0; border: 0; padding: 28px; }
@@ -162,7 +162,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 .footer-brand { color: var(--paper); }
 footer p { margin: 0; }
 footer div { display: flex; gap: 24px; }
-footer a { text-underline-offset: 4px; }
+footer a { display: inline-flex; align-items: center; min-height: 44px; text-underline-offset: 4px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; margin: -1px; padding: 0; border: 0; clip: rect(0,0,0,0); white-space: nowrap; }
 
 @keyframes arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }

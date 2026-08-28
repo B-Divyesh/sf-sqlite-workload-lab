@@ -1,0 +1,58 @@
+[
+  {
+    "id": "demo-sample",
+    "claim": "Runs the bundled sample workload without touching an existing workload",
+    "where": "landing first action, README Usage",
+    "test": "cargo test --locked --test cli demo_runs_bundled_sample_in_a_new_directory",
+    "sandbox": "fresh temporary parent; explicit new demo output; assert manifest, fixture, JSON, and Markdown report"
+  },
+  {
+    "id": "evidence-report",
+    "claim": "Records SQLite build details, PRAGMAs, query plans, CPU features, pins, timings, and writes JSON and Markdown reports",
+    "where": "landing evidence strip and hero, README introduction",
+    "test": "cargo test --locked --test cli documented_init_check_and_run_flow",
+    "sandbox": "fresh generated workload; run host profile; parse JSON fields and assert the Markdown companion exists"
+  },
+  {
+    "id": "regression-exit",
+    "claim": "A measured regression above the configured threshold exits with code 2",
+    "where": "landing hero and method, README Usage and Exit codes",
+    "test": "cargo test --locked --test cli comparison_uses_exit_code_two_for_regression",
+    "sandbox": "fresh generated workload and report; increase the candidate median beyond 15%; assert exit 2 and Gate: FAIL"
+  },
+  {
+    "id": "behavior-change-gate",
+    "claim": "A changed query result stops report comparison",
+    "where": "landing Method step 3, README CI pattern",
+    "test": "cargo test --locked --test cli comparison_rejects_a_changed_query_result",
+    "sandbox": "fresh generated baseline; alter only the candidate result digest; assert invalid-input exit 1"
+  },
+  {
+    "id": "read-only-preflight",
+    "claim": "Check rejects measured SQL that mutates the database without executing it",
+    "where": "README Workload format",
+    "test": "cargo test --locked --test cli check_rejects_a_mutating_measured_query",
+    "sandbox": "fresh generated manifest; replace measured SELECT with DELETE; assert JSON failure and no stdout"
+  },
+  {
+    "id": "offline-reload",
+    "claim": "The documentation works offline after the first visit",
+    "where": "offline status, README Privacy and scope",
+    "test": "npm run build:site && npx playwright test --grep @claim:offline-reload",
+    "sandbox": "fresh browser context; first online visit; wait for service worker; switch context offline; reload"
+  },
+  {
+    "id": "docs-private",
+    "claim": "The documentation uses no analytics, cookies, third-party scripts, or remote fonts",
+    "where": "landing privacy section, README Privacy and scope",
+    "test": "npm run build:site && npx playwright test --grep @claim:docs-private",
+    "sandbox": "fresh browser context; capture every request through the sample walkthrough; assert same origin only and no cookies"
+  },
+  {
+    "id": "cli-local",
+    "claim": "The CLI has no networking, analytics, crash reporting, or automatic upload",
+    "where": "CLI help, landing privacy section, README Privacy and scope",
+    "test": "cargo build --locked && node --test --test-name-pattern @claim:cli-local site/tests/claims.test.mjs",
+    "sandbox": "scan the complete CLI dependency and source surface for networking APIs, then run the bundled demo in a fresh temporary directory"
+  }
+]

@@ -1,5 +1,5 @@
 const CACHE = "sqlite-workload-lab-__RELEASE_ID__";
-const SHELL = ["/", "/index.html", "/lab-landscape.webp", "/lab-mark.svg"];
+const SHELL = ["/", "/index.html", "/lab-landscape-28fb23959f50.webp", "/lab-mark.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));

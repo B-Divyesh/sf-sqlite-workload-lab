@@ -13,7 +13,7 @@ test("built document contains required semantics", async () => {
 });
 
 test("static assets stay inside product budgets", async () => {
-  const hero = await stat("dist/site/lab-landscape.webp");
+  const hero = await stat("dist/site/lab-landscape-28fb23959f50.webp");
   assert.ok(hero.size <= 300 * 1024, `hero is ${hero.size} bytes`);
   const index = await readFile("dist/site/index.html", "utf8");
   const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map((match) => `dist/site${match[1]}`);
@@ -32,4 +32,16 @@ test("service-worker cache is versioned for this release", async () => {
   assert.match(worker, new RegExp(`const CACHE = "sqlite-workload-lab-${releaseId}"`));
   assert.doesNotMatch(worker, /sqlite-workload-lab-v1/);
   assert.doesNotMatch(worker, /__RELEASE_ID__/);
+});
+
+test("immutable hero asset uses its content hash in the URL", async () => {
+  const html = await readFile("dist/site/index.html", "utf8");
+  const worker = await readFile("dist/site/sw.js", "utf8");
+  const policy = await readFile("dist/site/staticwebapp.config.json", "utf8");
+  const heroUrl = "/lab-landscape-28fb23959f50.webp";
+  assert.match(html, new RegExp(`src="${heroUrl}"`));
+  assert.match(worker, new RegExp(`"${heroUrl}"`));
+  assert.equal(JSON.parse(policy).routes.find((route) => route.route === heroUrl).headers["Cache-Control"], "public, max-age=31536000, immutable");
+  await stat(`dist/site${heroUrl}`);
+  await assert.rejects(stat("dist/site/lab-landscape.webp"));
 });
