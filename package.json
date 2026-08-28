@@ -1,0 +1,23 @@
+{
+  "name": "sqlite-workload-lab-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config site/vite.config.ts",
+    "build": "npm run build:cli && npm run build:site",
+    "build:cli": "cargo build --release --locked",
+    "build:site": "vite build --config site/vite.config.ts",
+    "preview": "vite preview --config site/vite.config.ts",
+    "test": "cargo test --locked --all-targets && npm run build:site && node --test site/tests/unit.test.mjs && playwright test",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@fontsource-variable/inter": "5.2.6",
+    "@fontsource-variable/jetbrains-mono": "5.2.6",
+    "@playwright/test": "1.58.2",
+    "typescript": "5.9.2",
+    "vite": "7.3.6"
+  }
+}

@@ -11,7 +11,7 @@ The site is deliberately single-mode because the hero is an emitted-light observ
 | night-950 | `#07100f` | page background |
 | night-900 | `#0b1715` | raised field |
 | glass | `rgba(20, 43, 39, .76)` | translucent instrument surface |
-| glass-edge | `#31594f` | borders and dividers |
+| glass-edge | `#47796c` | borders and controls (3:1+ against the background) |
 | paper | `#f2f7ed` | primary text |
 | mist | `#a9bdb4` | secondary text (7.4:1 on night-950) |
 | aqua | `#61e7cd` | workload/action accent |

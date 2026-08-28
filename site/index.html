@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07100f" />
+    <meta name="description" content="Run pinned SQLite workloads across CPU profiles and produce diffable performance and compatibility evidence." />
+    <link rel="icon" href="/lab-mark.svg" type="image/svg+xml" />
+    <title>SQLite Workload Lab — performance evidence that travels</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="offline-bar" id="offline-bar" role="status" hidden>
+      Offline mode — the docs remain available. Workloads and reports always stay local.
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="SQLite Workload Lab home">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28">
+          <path d="M5 6.5 14 2l9 4.5v15L14 26l-9-4.5z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="m5 11 9 4.5 9-4.5M14 15.5V26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="14" cy="8" r="2" fill="currentColor"/>
+        </svg>
+        <span>SQLite<br /><b>Workload Lab</b></span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#method">Method</a>
+        <a href="#demo">Evidence</a>
+        <a href="#install">Install</a>
+        <a class="nav-source" href="https://github.com/B-Divyesh/sf-sqlite-workload-lab">Source</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <img class="hero-art" src="/lab-landscape.webp" width="1440" height="960" alt="A cyan SQLite data page sends one query trace into three illuminated silicon test layers." fetchpriority="high" />
+        <div class="hero-copy">
+          <p class="eyebrow"><span aria-hidden="true">●</span> Reproducibility instrument / v0.1</p>
+          <h1 id="hero-title">Performance evidence that travels with your SQLite release.</h1>
+          <p class="hero-lede">Pin the fixture. Repeat the workload. Record query plans and CPU features. Catch a 15% regression before your users catch a <code>SIGILL</code>.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#install">Run your first profile</a>
+            <a class="button quiet" href="#demo">Inspect a report <span aria-hidden="true">↓</span></a>
+          </div>
+          <dl class="hero-readout" aria-label="Lab guarantees">
+            <div><dt>Output</dt><dd>JSON + Markdown</dd></div>
+            <div><dt>Threshold</dt><dd>&gt; 15% fails CI</dd></div>
+            <div><dt>Telemetry</dt><dd>None</dd></div>
+          </dl>
+        </div>
+        <div class="hero-coordinate" aria-hidden="true">SQLWL / 01<br />52.44 µs<br />3 profiles</div>
+      </section>
+
+      <section class="signal-strip" aria-label="Captured evidence">
+        <p>One record, not a timing screenshot</p>
+        <ul>
+          <li>SQLite source ID</li>
+          <li>Compile options</li>
+          <li>PRAGMAs</li>
+          <li>Query plans</li>
+          <li>CPU flags</li>
+          <li>Fixture hash</li>
+        </ul>
+      </section>
+
+      <section class="method section" id="method" aria-labelledby="method-title">
+        <div class="section-intro">
+          <p class="eyebrow">A release claim becomes a record</p>
+          <h2 id="method-title">The context is part of the measurement.</h2>
+          <p>A fast query and a portable binary are different claims. The lab keeps the workload identical while making the execution environment impossible to miss.</p>
+        </div>
+        <ol class="method-grid">
+          <li>
+            <span class="method-number">01</span>
+            <div><h3>Declare</h3><p>Pin SQLite, fixture bytes, PRAGMAs, repetitions, queries, and at least three CPU profiles in one TOML file.</p></div>
+          </li>
+          <li>
+            <span class="method-number">02</span>
+            <div><h3>Measure</h3><p>Run the same binary on hardware, in a container, or under QEMU. Every report keeps its evidence label.</p></div>
+          </li>
+          <li>
+            <span class="method-number">03</span>
+            <div><h3>Gate</h3><p>Compare matching contexts. Changed results stop the comparison; median regressions above your threshold stop CI.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="demo section" id="demo" aria-labelledby="demo-title">
+        <div class="demo-heading">
+          <div>
+            <p class="eyebrow">Recorded walkthrough</p>
+            <h2 id="demo-title">Follow the evidence plane by plane.</h2>
+          </div>
+          <p>This static walkthrough mirrors fields emitted by the real CLI. No workload or report is uploaded.</p>
+        </div>
+        <div class="instrument">
+          <div class="instrument-topbar">
+            <span><i class="status-dot" aria-hidden="true"></i> RUN / candidate</span>
+            <span class="instrument-id">8FB2—A09C / LOCAL</span>
+          </div>
+          <div class="profile-rail" aria-label="Recorded CPU profiles">
+            <div class="profile active"><span>01</span><strong>x86-64-v2</strong><small>Emulator evidence</small></div>
+            <div class="profile"><span>02</span><strong>x86-64-v3</strong><small>Container evidence</small></div>
+            <div class="profile"><span>03</span><strong>arm64</strong><small>Hardware evidence</small></div>
+          </div>
+          <div class="demo-body">
+            <div class="tablist" role="tablist" aria-label="Report layers">
+              <button role="tab" id="tab-run" aria-controls="panel-run" aria-selected="true" tabindex="0" data-panel="run">Run</button>
+              <button role="tab" id="tab-context" aria-controls="panel-context" aria-selected="false" tabindex="-1" data-panel="context">Context</button>
+              <button role="tab" id="tab-diff" aria-controls="panel-diff" aria-selected="false" tabindex="-1" data-panel="diff">CI diff</button>
+            </div>
+            <div class="panels">
+              <section role="tabpanel" id="panel-run" aria-labelledby="tab-run" data-panel-content="run">
+                <div class="panel-label"><span>Command</span><button class="copy-button" type="button" data-copy="sqlite-workload-lab run lab.toml --profile x86-64-v2 --out reports/candidate">Copy command</button></div>
+                <pre tabindex="0" aria-label="Workload run command and result"><code><span class="prompt">$</span> sqlite-workload-lab run lab.toml \
+  --profile x86-64-v2 --out reports/candidate
+
+<span class="ok">✓</span> Fixture sha256  7c50…6a2e
+<span class="ok">✓</span> SQLite         3.50.4 / pinned
+<span class="ok">✓</span> Repetitions    12 measured + 2 warmups
+<span class="warn">!</span> Evidence       emulator / x86_64</code></pre>
+              </section>
+              <section role="tabpanel" id="panel-context" aria-labelledby="tab-context" data-panel-content="context" hidden>
+                <div class="panel-label"><span>Captured context</span><span>report.json</span></div>
+                <pre tabindex="0" aria-label="Captured JSON context"><code><span class="key">"profile"</span>: <span class="string">"x86-64-v2"</span>,
+<span class="key">"evidence_kind"</span>: <span class="string">"emulator"</span>,
+<span class="key">"profile_match"</span>: <span class="ok">true</span>,
+<span class="key">"required"</span>: [<span class="string">"sse4_2"</span>, <span class="string">"popcnt"</span>],
+<span class="key">"forbidden"</span>: [<span class="string">"avx"</span>, <span class="string">"avx2"</span>],
+<span class="key">"plan"</span>: <span class="string">"SCAN docs VIRTUAL TABLE INDEX 0:M2"</span></code></pre>
+              </section>
+              <section role="tabpanel" id="panel-diff" aria-labelledby="tab-diff" data-panel-content="diff" hidden>
+                <div class="panel-label"><span>Regression gate</span><span class="fail-label">FAIL / exit 2</span></div>
+                <div class="diff-table" role="table" aria-label="Recorded comparison result">
+                  <div role="row" class="diff-head"><span role="columnheader">Query</span><span role="columnheader">Baseline</span><span role="columnheader">Candidate</span><span role="columnheader">Change</span></div>
+                  <div role="row"><strong role="cell">phrase-search</strong><span role="cell">44 µs</span><span role="cell">52 µs</span><span role="cell" class="regression">+18.18% regression</span></div>
+                  <div role="row"><strong role="cell">prefix-filter</strong><span role="cell">31 µs</span><span role="cell">32 µs</span><span role="cell" class="stable">+3.22% stable</span></div>
+                </div>
+                <p class="method-note">Descriptive medians only. The lab does not claim statistical significance.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+        <p class="sr-only" id="copy-status" aria-live="polite"></p>
+      </section>
+
+      <section class="profiles section" aria-labelledby="profiles-title">
+        <div class="section-intro">
+          <p class="eyebrow">Compatibility without ambiguity</p>
+          <h2 id="profiles-title">Three environments. Three honest labels.</h2>
+        </div>
+        <div class="profile-map">
+          <article><span class="glyph hardware" aria-hidden="true"></span><p class="label">Hardware</p><h3>Release host</h3><p>Best evidence for actual latency and throughput on that named machine.</p></article>
+          <article><span class="glyph container" aria-hidden="true"></span><p class="label">Container</p><h3>Pinned userspace</h3><p>Reproduces libraries and build context; it does not change the host CPU.</p></article>
+          <article><span class="glyph emulator" aria-hidden="true"></span><p class="label">Emulator</p><h3>Instruction floor</h3><p>Exercises an older CPU model and exposes leaked AVX flags before release.</p></article>
+        </div>
+      </section>
+
+      <section class="install section" id="install" aria-labelledby="install-title">
+        <div class="install-copy">
+          <p class="eyebrow">Local by construction</p>
+          <h2 id="install-title">From empty folder to reviewable report.</h2>
+          <p>One Rust binary. A checked-in TOML manifest. No account, token, collector, hosted runner, or automatic tuning.</p>
+          <a class="text-link" href="https://github.com/B-Divyesh/sf-sqlite-workload-lab#usage">Read the full workload schema <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="install-terminal">
+          <div class="terminal-title"><span>Quick start</span><button type="button" class="copy-button" data-copy="cargo install --path .&#10;sqlite-workload-lab init lab.toml&#10;sqlite-workload-lab check lab.toml">Copy all</button></div>
+          <pre tabindex="0" aria-label="Quick start commands"><code><span class="comment"># Install from a clone</span>
+<span class="prompt">$</span> cargo install --path .
+
+<span class="comment"># Create and validate a pinned workload</span>
+<span class="prompt">$</span> sqlite-workload-lab init lab.toml
+<span class="prompt">$</span> sqlite-workload-lab check lab.toml
+
+<span class="ok">Valid:</span> 1 query across 3 CPU profiles.</code></pre>
+        </div>
+      </section>
+
+      <section class="privacy" id="privacy" aria-labelledby="privacy-title">
+        <span class="privacy-mark" aria-hidden="true">⌁</span>
+        <div><h2 id="privacy-title">Your database never enters this page.</h2><p>The CLI has no networking or telemetry. The documentation site stores no personal data and uses no analytics, cookies, third-party scripts, or remote fonts.</p></div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="#top" aria-label="Back to top">SQLite / Workload Lab</a>
+      <p>Open source under MIT. Built for claims that can be checked.</p>
+      <div><a href="https://github.com/B-Divyesh/sf-sqlite-workload-lab">GitHub</a><a href="#privacy">Privacy</a></div>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

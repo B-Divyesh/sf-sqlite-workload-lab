@@ -41,6 +41,22 @@ Run every profile whose runner is `native` in the current environment:
 sqlite-workload-lab matrix lab.toml --out reports/candidate
 ```
 
+To produce container evidence, place the release binary beside `lab.toml` and run the same selection inside a pinned image (the container still uses the host CPU):
+
+```sh
+docker run --rm -v "$PWD:/lab" -w /lab debian:bookworm-slim \
+  ./sqlite-workload-lab run lab.toml --profile container --out reports/candidate
+```
+
+To check an x86 instruction floor, run the target binary through QEMU with an explicit CPU model:
+
+```sh
+qemu-x86_64 -cpu Nehalem ./sqlite-workload-lab \
+  run lab.toml --profile emulated-x86-v2 --out reports/candidate
+```
+
+Container evidence pins userspace but not silicon. QEMU evidence checks the declared instruction surface but is not a hardware latency measurement; the report labels preserve both distinctions.
+
 Compare a candidate with a committed baseline. A regression over 15% exits with code 2, which makes the command a useful CI gate.
 
 ```sh

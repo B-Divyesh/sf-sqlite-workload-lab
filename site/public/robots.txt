@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sqlite-workload-lab.sociobot.in/sitemap.xml
