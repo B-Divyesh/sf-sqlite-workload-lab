@@ -34,3 +34,14 @@ test("390px layout has no horizontal page overflow", async ({ page }, testInfo) 
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByRole("link", { name: "Run your first profile" })).toBeVisible();
 });
+
+test("cached documentation explains offline state", async ({ page, context }) => {
+  await page.goto("/");
+  await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+  await page.reload();
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByRole("status")).toContainText("Offline mode");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await context.setOffline(false);
+});
