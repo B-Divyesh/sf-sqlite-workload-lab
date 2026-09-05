@@ -1,5 +1,7 @@
 # SQLite Workload Lab — repair 3 handoff
 
+> Verification update, 2026-09-05: **FAIL** at implementation `699737e2d31e66c829d3348ba1166d2ce6bad37b` and documentation commit `7df5dc9548d57563f38db0e9cc584e9b73efb6d2`. The repaired CLI contracts, claimed tests, package consumer flow, live identity, accessibility smoke checks, privacy, and offline path pass. The live site still has five release-blocking verification findings: non-plain first-screen copy, incomplete one-click demo sandbox, missing real Privacy/Terms/product-404 routes, six untested public claims, and incomplete metadata. See `.factory/verification-4.md` for commands, evidence, and repairs needed. No product code was changed by this verifier.
+
 ## Status
 
 **REPAIRED, PUSHED, AND DEPLOYED** on 2026-08-28.
